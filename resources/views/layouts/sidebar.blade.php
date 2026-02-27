@@ -2,8 +2,8 @@
 
     {{-- Logo / System Name --}}
     <div class="px-6 py-5 border-b">
-        <h1 class="text-xl font-bold text-indigo-600">
-            📚 Mini Library
+        <h1 class="text-xl font-bold text-indigo-600 flex items-center">
+            <x-icon name="library-big" class="w-8 h-8 mr-2" /> Mini Library
         </h1>
         <p class="text-xs text-gray-500 mt-1">
             Management System
@@ -20,7 +20,7 @@
                 ? 'bg-indigo-100 text-indigo-700 font-semibold'
                 : 'text-gray-600 hover:bg-gray-100 hover:text-indigo-600' }}">
 
-            <span class="mr-3">🏠</span>
+            <x-icon name="home" class="w-5 h-5 mr-3" />
             Dashboard
         </a>
 
@@ -31,7 +31,7 @@
                 ? 'bg-indigo-100 text-indigo-700 font-semibold'
                 : 'text-gray-600 hover:bg-gray-100 hover:text-indigo-600' }}">
 
-            <span class="mr-3">🎓</span>
+            <x-icon name="graduation-cap" class="w-5 h-5 mr-3" />
             Students
         </a>
 
@@ -42,7 +42,7 @@
                 ? 'bg-indigo-100 text-indigo-700 font-semibold'
                 : 'text-gray-600 hover:bg-gray-100 hover:text-indigo-600' }}">
 
-            <span class="mr-3">✍️</span>
+            <x-icon name="pen-tool" class="w-5 h-5 mr-3" />
             Authors
         </a>
 
@@ -53,7 +53,7 @@
                 ? 'bg-indigo-100 text-indigo-700 font-semibold'
                 : 'text-gray-600 hover:bg-gray-100 hover:text-indigo-600' }}">
 
-            <span class="mr-3">📖</span>
+            <x-icon name="book-open" class="w-5 h-5 mr-3" />
             Books
         </a>
 
@@ -64,7 +64,7 @@
                 ? 'bg-indigo-100 text-indigo-700 font-semibold'
                 : 'text-gray-600 hover:bg-gray-100 hover:text-indigo-600' }}">
 
-            <span class="mr-3">📦</span>
+            <x-icon name="archive" class="w-5 h-5 mr-3" />
             Borrow Records
         </a>
 

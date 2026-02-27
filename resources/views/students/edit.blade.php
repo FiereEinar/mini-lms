@@ -41,6 +41,21 @@
                 @enderror
             </div>
 
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">
+                    Contact Number
+                </label>
+                <input type="number"
+                       name="contact"
+                       value="{{ old('contact', $student->contact) }}"
+                       class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none
+                       @error('contact') border-red-500 @enderror">
+
+                @error('contact')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
             <div class="flex justify-end space-x-3">
                 <a href="{{ route('students.index') }}"
                    class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg">

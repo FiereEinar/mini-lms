@@ -34,6 +34,7 @@ class StudentController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'student_number' => 'required|string|max:255|unique:students,student_number',
+            'contact' => 'nullable|string|max:255',
         ]);
 
         Student::create($validated);
@@ -67,6 +68,7 @@ class StudentController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'student_number' => 'required|string|max:255|unique:students,student_number,' . $student->id,
+            'contact' => 'nullable|string|max:255',
         ]);
 
         $student->update($validated);

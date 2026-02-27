@@ -40,7 +40,8 @@
                         <x-dropdown align="right" width="48">
                             <x-slot name="trigger">
                                 <button class="flex items-center space-x-2 text-sm font-medium text-gray-700 hover:text-indigo-600 focus:outline-none transition">
-                                    <span>{{ Auth::user()->name }}</span>
+                                    <x-icon name="circle-user-round" class="w-5 h-5" />
+                                    <span class="inline-flex items-center">{{ Auth::user()->name }}</span>
 
                                     <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd"
@@ -76,6 +77,11 @@
 
         </div>
     </div>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        lucide.createIcons();
+    </script>
 
     @stack('scripts')
 </body>

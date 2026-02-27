@@ -13,6 +13,7 @@ class Student extends Model
     protected $fillable = [
         'name',
         'student_number',
+        'contact',
     ];
 
     public function borrows()

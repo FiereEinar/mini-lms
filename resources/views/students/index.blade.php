@@ -25,6 +25,7 @@
                     <tr>
                         <th class="px-6 py-3">Name</th>
                         <th class="px-6 py-3">Student Number</th>
+                        <th class="px-6 py-3">Contact Number</th>
                         <th class="px-6 py-3 text-right">Actions</th>
                     </tr>
                 </thead>
@@ -36,6 +37,9 @@
                             </td>
                             <td class="px-6 py-4">
                                 {{ $student->student_number }}
+                            </td>
+                             <td class="px-6 py-4">
+                                {{ $student->contact ?? '--' }}
                             </td>
                             <td class="px-6 py-4 text-right space-x-2">
 

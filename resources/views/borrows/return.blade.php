@@ -34,6 +34,7 @@
                                 <div>
                                     <p class="font-medium text-gray-800">
                                         {{ $item->book->title }}
+                                        <span class="text-xs capitalize text-gray-500">{{ $item->status }}</span>
                                     </p>
 
                                     @if($item->status === 'returned')
@@ -42,13 +43,17 @@
                                         </p>
                                     @else
                                         @php
-                                            $comparisonDate = $item->status === 'returned' ? $item->return_date : now();
-                                            $overdueDays = Carbon\Carbon::parse($comparisonDate)->greaterThan($borrow->due_date)
-                                                ? Carbon\Carbon::parse($comparisonDate)->diffInDays($borrow->due_date)
-                                                : 0;
-                                            $fine = $overdueDays * 10;
-                                        @endphp
+                                            $today = now()->startOfDay();
+                                            $dueDate = $borrow->due_date->copy()->startOfDay();
 
+                                            $overdueDays = 0;
+                                            $fine = 0;
+
+                                            if ($today->gt($dueDate)) {
+                                                $overdueDays = $dueDate->diffInDays($today);
+                                                $fine = $overdueDays * 10;
+                                            }
+                                        @endphp
                                         @if($overdueDays > 0)
                                             <p class="text-red-500 text-sm">
                                                 Overdue: {{ $overdueDays }} days | Fine: ₱{{ $fine }}

@@ -32,14 +32,23 @@
                 <tbody class="divide-y divide-gray-200">
                     @forelse($borrows as $borrow)
                         @php
-                            // Calculate total fine for this borrow
-                            $totalFine = $borrow->borrowItems->sum(function($item) use ($borrow) {
-                                $comparisonDate = $item->return_date ?? now();
-                                $overdueDays = \Carbon\Carbon::parse($comparisonDate)->greaterThan($borrow->due_date)
-                                    ? \Carbon\Carbon::parse($comparisonDate)->diffInDays($borrow->due_date)
-                                    : 0;
-                                return $overdueDays * 10;
-                            });
+                            $totalFine = 0;
+
+                            foreach ($borrow->borrowItems as $item) {
+                                if ($item->status === 'returned') {
+                                    $totalFine += (int) $item->fine_amount;
+                                } else {
+                                    $today = \Carbon\Carbon::today();
+                                    $dueDate = \Carbon\Carbon::parse($borrow->due_date);
+
+                                    if ($today->greaterThan($dueDate)) {
+                                        $daysLate = $today->diffInDays($dueDate);
+                                        $totalFine += $daysLate * 10;
+                                    }
+                                }
+                            }
+
+                            $totalFine = $totalFine * -1;
                         @endphp
                         <tr class="hover:bg-gray-50">
                             <td class="px-6 py-4 font-medium">{{ $borrow->student->name }}</td>
@@ -56,8 +65,21 @@
                                                 {{ ucfirst($item->status) }}
                                                 @if($item->status === 'returned' && $item->fine_amount > 0)
                                                     | ₱{{ $item->fine_amount }}
-                                                @elseif($item->status === 'borrowed' && (now() > $borrow->due_date))
-                                                    | ₱{{ (now()->diffInDays($borrow->due_date) * 10) }}
+                                                @elseif($item->status === 'borrowed')
+                                                    @php
+                                                        $today = \Carbon\Carbon::today();
+                                                        $dueDate = \Carbon\Carbon::parse($borrow->due_date);
+                                                        $fine = 0;
+
+                                                        if ($today->greaterThan($dueDate)) {
+                                                            $daysLate = $today->diffInDays($dueDate);
+                                                            $fine = $daysLate * 10;
+                                                        }
+                                                    @endphp
+
+                                                    @if($fine > 0)
+                                                        | ₱{{ $fine }}
+                                                    @endif
                                                 @endif
                                             </span>
                                         </li>

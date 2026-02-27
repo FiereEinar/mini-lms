@@ -10,6 +10,7 @@ use App\Models\BorrowItem;
 use App\Models\Student;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BorrowController extends Controller
 {
@@ -110,36 +111,51 @@ class BorrowController extends Controller
             'return_date' => 'nullable|date',
         ]);
 
-        // Use provided return_date or default to today
-        $returnDate = $validated['return_date'] ? Carbon::parse($validated['return_date']) : Carbon::today();
+        // Normalize return date (remove time component)
+        $returnDate = isset($validated['return_date'])
+            ? Carbon::parse($validated['return_date'])->startOfDay()
+            : now()->startOfDay();
 
-        foreach ($validated['borrow_items'] as $itemId) {
-            $item = BorrowItem::findOrFail($itemId);
+        DB::transaction(function () use ($validated, $borrow, $returnDate) {
 
-            if ($item->status === 'returned') {
-                continue; // Skip already returned
+            foreach ($validated['borrow_items'] as $itemId) {
+
+                // Ensure item belongs to this borrow
+                $item = $borrow->borrowItems()->where('id', $itemId)->firstOrFail();
+
+                if ($item->status === 'returned') {
+                    continue;
+                }
+
+                // Normalize due date
+                $dueDate = $borrow->due_date->copy()->startOfDay();
+
+                $overdueDays = 0;
+                $fine = 0;
+
+                if ($returnDate->gt($dueDate)) {
+                    $overdueDays = $dueDate->diffInDays($returnDate);
+                    $fine = $overdueDays * 10;
+                }
+
+                $item->update([
+                    'status' => 'returned',
+                    'return_date' => $returnDate,
+                    'fine_amount' => $fine,
+                ]);
+
+                // Update inventory
+                $item->book()->increment('available_copies');
             }
 
-            // Fine = ₱10 × overdue days (if any)
-            $dueDate = Carbon::parse($borrow->due_date);
-            $overdueDays = $returnDate->greaterThan($dueDate) ? $returnDate->diffInDays($dueDate) : 0;
-            $fine = $overdueDays * 10;
+            // If all items are returned → mark borrow returned
+            if ($borrow->borrowItems()->where('status', 'borrowed')->count() === 0) {
+                $borrow->update(['status' => 'returned']);
+            }
+        });
 
-            $item->update([
-                'status' => 'returned',
-                'return_date' => $returnDate,
-                'fine_amount' => $fine,
-            ]);
-
-            // Increment book inventory
-            $item->book->increment('available_copies');
-        }
-
-        // Update borrow status if all items returned
-        if ($borrow->borrowItems()->where('status', 'borrowed')->count() === 0) {
-            $borrow->update(['status' => 'returned']);
-        }
-
-        return redirect()->route('borrows.index')->with('success', 'Books returned successfully.');
+        return redirect()
+            ->route('borrows.index')
+            ->with('success', 'Books returned successfully.');
     }
 }
