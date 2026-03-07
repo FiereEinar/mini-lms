@@ -1,4 +1,6 @@
-<aside class="w-64 shrink-0 bg-white border-r border-gray-200 min-h-screen flex flex-col">
+<aside
+    :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
+    class="fixed md:relative z-40 w-64 bg-white border-r border-gray-200 min-h-screen transform transition-transform duration-200 ease-in-out md:translate-x-0 flex flex-col">
 
     {{-- Logo / System Name --}}
     <div class="px-6 py-5 border-b">
@@ -76,3 +78,9 @@
     </div>
 
 </aside>
+
+<div
+    x-show="sidebarOpen"
+    @click="sidebarOpen = false"
+    class="fixed inset-0 bg-black bg-opacity-40 z-30 md:hidden">
+</div>

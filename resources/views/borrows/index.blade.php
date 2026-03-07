@@ -42,20 +42,18 @@
                                     $dueDate = \Carbon\Carbon::parse($borrow->due_date);
 
                                     if ($today->greaterThan($dueDate)) {
-                                        $daysLate = $today->diffInDays($dueDate);
+                                        $daysLate = abs($today->diffInDays($dueDate));
                                         $totalFine += $daysLate * 10;
                                     }
                                 }
                             }
-
-                            $totalFine = $totalFine * -1;
                         @endphp
                         <tr class="hover:bg-gray-50">
                             <td class="px-6 py-4 font-medium">{{ $borrow->student->name }}</td>
                             <td class="px-6 py-4">
                                 <ul class="space-y-1">
                                     @foreach($borrow->borrowItems as $item)
-                                        <li class="flex justify-between">
+                                        <li class="flex justify-between gap-2">
                                             <span>{{ $item->book->title }}</span>
                                             <span class="text-xs 
                                                 @if($item->status === 'returned') text-green-600 
@@ -63,6 +61,7 @@
                                                 @else text-gray-500 
                                                 @endif">
                                                 {{ ucfirst($item->status) }}
+                                                {{ $item->return_date ? 'on ' . \Carbon\Carbon::parse($item->return_date)->format('M d, Y') : '' }}
                                                 @if($item->status === 'returned' && $item->fine_amount > 0)
                                                     | ₱{{ $item->fine_amount }}
                                                 @elseif($item->status === 'borrowed')

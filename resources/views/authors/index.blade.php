@@ -36,7 +36,7 @@
                             <td class="px-6 py-4 font-medium text-gray-800">
                                 {{ $author->name }}
                             </td>
-                            <td class="px-6 py-4 text-right space-x-2">
+                            <td class="px-6 py-4 text-right flex justify-end gap-2">
 
                                 <a href="{{ route('authors.edit', $author) }}"
                                    class="bg-yellow-400 hover:bg-yellow-500 text-white px-3 py-1 rounded-md text-xs">

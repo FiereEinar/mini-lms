@@ -28,7 +28,7 @@
                         <th class="px-6 py-3">Contact Number</th>
                         <th class="px-6 py-3 text-right">Actions</th>
                     </tr>
-                </thead>
+                </thead>    
                 <tbody class="divide-y divide-gray-200">
                     @forelse($students as $student)
                         <tr class="hover:bg-gray-50">
@@ -41,7 +41,7 @@
                              <td class="px-6 py-4">
                                 {{ $student->contact ?? '--' }}
                             </td>
-                            <td class="px-6 py-4 text-right space-x-2">
+                            <td class="px-6 py-4 text-right flex justify-end gap-2">
 
                                 <a href="{{ route('students.edit', $student) }}"
                                    class="inline-block bg-yellow-400 hover:bg-yellow-500 text-white px-3 py-1 rounded-md text-xs">

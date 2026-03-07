@@ -20,7 +20,7 @@ class BorrowController extends Controller
     public function index()
     {
         $borrows = Borrow::with('student', 'borrowItems.book')->latest()->paginate(10);
-
+        
         return view('borrows.index', compact('borrows'));
     }
 

@@ -44,7 +44,7 @@
                             <td class="px-6 py-4">
                                 {{ $book->available_copies }} / {{ $book->total_copies }}
                             </td>
-                            <td class="px-6 py-4 text-right space-x-2">
+                            <td class="px-6 py-4 text-right flex justify-end gap-2">
 
                                 <a href="{{ route('books.edit', $book) }}"
                                    class="bg-yellow-400 hover:bg-yellow-500 text-white px-3 py-1 rounded-md text-xs">
